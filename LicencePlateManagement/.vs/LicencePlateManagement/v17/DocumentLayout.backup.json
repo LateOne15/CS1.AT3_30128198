@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint1\\LicencePlateManagement\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|c:\\users\\30128198\\documents\\github\\30128198.at2_sprint1\\licenceplatemanagement\\licenceplatemanagement\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|solutionrelative:licenceplatemanagement\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|c:\\users\\30128198\\documents\\github\\30128198.at2_sprint1\\licenceplatemanagement\\licenceplatemanagement\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|solutionrelative:licenceplatemanagement\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 254,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint1\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "LicencePlateManagement\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint1\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml",
+              "RelativeToolTip": "LicencePlateManagement\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-09-25T04:25:55.373Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint1\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "LicencePlateManagement\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint1\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml.cs",
+              "RelativeToolTip": "LicencePlateManagement\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-25T04:25:55.013Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

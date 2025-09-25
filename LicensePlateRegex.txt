@@ -1,0 +1,1 @@
+private readonly Regex _rxPlate = new(@"^1[a-zA-z]{3}-\d{3}$");
