@@ -103,7 +103,7 @@ namespace LicencePlateManagement
         private int BinarySearch(List<string> list, string searchTerm)
         {
             int min = 0, max = list.Count-1, mid = 0;
-            if (max == 0)
+            if (max < 0)
             {
                 return -1;
             }
