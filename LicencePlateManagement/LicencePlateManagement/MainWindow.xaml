@@ -30,12 +30,14 @@
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
             <DockPanel Grid.Column="0" LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Text="All Plates" FontSize="18"/>
-                <Button DockPanel.Dock="Bottom" x:Name="btnAllReset" Width="100" Content="Reset"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnAllReset" Width="100" Content="Reset" Click="btnReset_Click"/>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
-                <ListView DockPanel.Dock="Top" x:Name="lbxAllPlates"/>
+                <ListView DockPanel.Dock="Top" x:Name="lbxAllPlates" SelectionChanged="lbx_SelectionChanged" GotFocus="lbxFocus"/>
             </DockPanel>
+            
             <StackPanel Margin="15"  Grid.Column="1" Orientation="Vertical">
                 <TextBlock Text="Selected:"/>
                 <WrapPanel Orientation="Horizontal">
@@ -51,7 +53,7 @@
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <WrapPanel Orientation="Horizontal">
                     <Button x:Name="btnEnter" Content="Enter:" Width="85" Click="btnEnter_Click"/>
-                    <TextBox x:Name="tbEnter" Width="85"/>
+                    <TextBox x:Name="tbEnter"  Width="85"/>
                 </WrapPanel>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <WrapPanel Orientation="Horizontal">
@@ -73,11 +75,12 @@
                     <ToggleButton x:Name="tbtnSequential" Content="Sequential" Width="85" Checked="tbtn_Checked" Unchecked="tbtn_Unchecked"/>
                 </WrapPanel>
             </StackPanel>
+            
             <DockPanel Grid.Column="2" LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Text="Tagged Plates" FontSize="18" HorizontalAlignment="Right"/>
-                <Button DockPanel.Dock="Bottom" x:Name="btnTaggedReset" Width="100" Content="Reset"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnTaggedReset" Width="100" Content="Reset" Click="btnReset_Click"/>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
-                <ListView DockPanel.Dock="Top" x:Name="lbxTagged"/>
+                <ListView DockPanel.Dock="Top" x:Name="lbxTagged" SelectionChanged="lbx_SelectionChanged" GotFocus="lbxFocus"/>
             </DockPanel>
         </Grid>
     </Grid>
