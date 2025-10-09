@@ -5,8 +5,80 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LicencePlateManagement"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="500" MinWidth="480" MinHeight="485"
+        Style="{StaticResource WinAll}">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="130"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="130"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <GridSplitter Height="30"/>
+                <TextBlock Text="Active Systems PTY" FontSize="36" FontFamily="Britannic Bold" HorizontalAlignment="Center"/>
+                <TextBlock Text="Licence Plate Management" FontSize="24" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <Image x:Name="Active_Systems_Logo" Grid.Column="1" Source="/img/logo.png" Stretch="Fill" Margin="10"/>
+        </Grid>
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Column="0" LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="All Plates" FontSize="18"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnAllReset" Width="100" Content="Reset"/>
+                <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
+                <ListView DockPanel.Dock="Top" x:Name="lbxAllPlates"/>
+            </DockPanel>
+            <StackPanel Margin="15"  Grid.Column="1" Orientation="Vertical">
+                <TextBlock Text="Selected:"/>
+                <WrapPanel Orientation="Horizontal">
+                    <TextBox x:Name="tbSelect" Width="90" IsReadOnly="True"/>
+                    <GridSplitter Width="8" Height="0"/>
+                    <TextBlock x:Name="tbTag" Text="Untagged"/>
+                </WrapPanel>
+                <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
+                <WrapPanel Orientation="Horizontal">
+                    <Button x:Name="btnOpen" Content="Open" Width="85" Click="btnOpen_Click"/>
+                    <Button x:Name="btnSave" Content="Save" Width="85" Click="btnSave_Click"/>
+                </WrapPanel>
+                <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
+                <WrapPanel Orientation="Horizontal">
+                    <Button x:Name="btnEnter" Content="Enter:" Width="85" Click="btnEnter_Click"/>
+                    <TextBox x:Name="tbEnter" Width="85"/>
+                </WrapPanel>
+                <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
+                <WrapPanel Orientation="Horizontal">
+                    <Button x:Name="btnTag" Content="Tag/Untag" Width="85" Click="btnTag_Click"/>
+                    <Button x:Name="btnDelete" Content="Delete" Width="85" Click="btnDelete_Click"/>
+                </WrapPanel>
+                <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
+                <WrapPanel Orientation="Horizontal">
+                    <Button x:Name="btnEdit" Content="Edit:" Width="85" Click="btnEdit_Click"/>
+                    <TextBox x:Name="tbEdit" Width="85"/>
+                </WrapPanel>
+                <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
+                <WrapPanel Orientation="Horizontal">
+                    <Button x:Name="btnSearch" Content="Search:" Width="85" Click="btnSearch_Click"/>
+                    <TextBox x:Name="tbSearch" Width="85"/>
+                </WrapPanel>
+                <WrapPanel Orientation="Horizontal">
+                    <ToggleButton x:Name="tbtnBinary" Content="Binary" Width="85" Checked="tbtn_Checked" Unchecked="tbtn_Unchecked"/>
+                    <ToggleButton x:Name="tbtnSequential" Content="Sequential" Width="85" Checked="tbtn_Checked" Unchecked="tbtn_Unchecked"/>
+                </WrapPanel>
+            </StackPanel>
+            <DockPanel Grid.Column="2" LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="Tagged Plates" FontSize="18" HorizontalAlignment="Right"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnTaggedReset" Width="100" Content="Reset"/>
+                <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
+                <ListView DockPanel.Dock="Top" x:Name="lbxTagged"/>
+            </DockPanel>
+        </Grid>
     </Grid>
 </Window>

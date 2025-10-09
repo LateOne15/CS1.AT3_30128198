@@ -3,12 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|c:\\users\\30128198\\documents\\github\\cs1.at3_30128198\\licenceplatemanagement\\licenceplatemanagement\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|solutionrelative:licenceplatemanagement\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|c:\\users\\30128198\\documents\\github\\cs1.at3_30128198\\licenceplatemanagement\\licenceplatemanagement\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|solutionrelative:licenceplatemanagement\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|c:\\users\\30128198\\documents\\github\\cs1.at3_30128198\\licenceplatemanagement\\licenceplatemanagement\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{14139DAE-F5C5-46F8-9BC9-A5189CD6CC55}|LicencePlateManagement\\LicencePlateManagement.csproj|solutionrelative:licenceplatemanagement\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,11 +24,11 @@
       "DocumentGroups": [
         {
           "DockedHeight": 254,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml",
               "RelativeDocumentMoniker": "LicencePlateManagement\\MainWindow.xaml",
@@ -34,15 +40,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "LicencePlateManagement\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml.cs",
-              "RelativeToolTip": "LicencePlateManagement\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml.cs*",
+              "RelativeToolTip": "LicencePlateManagement\\MainWindow.xaml.cs*",
+              "ViewState": "AgIAAEwAAAAAAAAAAADgv2EAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-25T04:25:55.013Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "..\\..\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml",
+              "RelativeToolTip": "..\\..\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAACDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-09T02:25:03.968Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "..\\..\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml.cs",
+              "RelativeToolTip": "..\\..\\30128198.AT2_Sprint2\\AstronomicalProcessing\\Astronomical\\MainWindow.xaml.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAC8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-09T03:29:50.317Z",
               "EditorCaption": ""
             }
           ]
