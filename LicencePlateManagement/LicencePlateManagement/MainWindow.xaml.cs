@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.Design.Serialization;
+using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -8,8 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
+// Lleyton Eggins, AT3
+// Date: 16/10/25
+// Version: 1.00
+// Licence Plate Management
+// Creates and/or saves a list of Licence Plates in either
+// a tagged and untagged list, and displays them in the program.
 
 namespace LicencePlateManagement
 {
@@ -28,6 +38,22 @@ namespace LicencePlateManagement
             tbtnBinary.IsChecked = true;
         }
 
+        private void FileSave (string filename)
+        {
+            using (StreamWriter writer = new StreamWriter(filename))
+            {
+                writer.WriteLine("Untagged:");
+                foreach (string plate in lbxAllPlates.Items)
+                {
+                    writer.WriteLine(plate);
+                }
+                writer.WriteLine("Tagged:");
+                foreach (string plate in lbxTagged.Items)
+                {
+                    writer.WriteLine(plate);
+                }
+            }
+        }
         #region Messages
         private void DisplayMessage(string msg, string caption) // display non-error message
         {
@@ -174,12 +200,85 @@ namespace LicencePlateManagement
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.DefaultExt = ".txt";
+            dialog.Filter = "Text documents (.txt)|*.txt";
+            dialog.FileName = "day_01.txt";
 
+            bool ? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                string filename = dialog.FileName;
+                List<string> contents = new List<string>();
+                using (StreamReader sr = new StreamReader(filename))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        contents.Add(line);
+                    }
+                }
+                if (contents.Count > 2) 
+                {
+                    if (contents[0].Equals("Untagged:"))
+                    {
+                        contents.Remove(contents[0]);
+                        while (contents[0] != "Tagged:" && contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First()))
+                        {
+                            lbxAllPlates.Items.Add(contents[0]);
+                            contents.Remove(contents[0]);
+                        }
+                        if (contents.Count > 0 && contents.First().Equals("Tagged:"))
+                        {
+                            contents.Remove(contents[0]);
+                            while (contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First()))
+                            {
+                                lbxTagged.Items.Add(contents[0]);
+                                contents.Remove(contents[0]);
+                            }
+                            DisplayMessage("File opened successfully", "Success!");
+                        }
+                        else
+                        {
+                            DisplayMessage("File opened successfully.\nHowever, please be aware that\nthe tagged list failed to load.", "Warning");
+                        }
+                    }
+                    else
+                    {
+                        DisplayError("File is not in the correct\nformat for this program","File Error");
+                    }
+                }
+                else
+                {
+                    DisplayError("File is not in the correct\nformat for this program", "File Error");
+                }
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.DefaultExt = ".txt";
+            dialog.Filter = "Text documents (.txt)|*.txt";
 
+            int i = 1;
+            string filename = $"day_{i.ToString("D2")}.txt";
+            while (File.Exists(filename))
+            {
+                i++;
+                filename = $"day_{i.ToString("D2")}.txt";
+            }
+
+            dialog.FileName = filename;
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                string fileName = dialog.FileName;
+                FileSave(fileName);
+            }
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -239,13 +338,20 @@ namespace LicencePlateManagement
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (lbxAllPlates.SelectedItem != null)
+            if (!String.IsNullOrWhiteSpace(LastSelectedPlate))
             {
-                lbxAllPlates.Items.Remove(lbxAllPlates.SelectedItem);
+                if (LastSelectedTagged)
+                {
+                    lbxTagged.Items.Remove(lbxTagged.SelectedItem);
+                }
+                else
+                {
+                    lbxAllPlates.Items.Remove(lbxAllPlates.SelectedItem);
+                }
             }
             else
             {
-                DisplayError("Error: No Plate Selected","Selection Error");
+                DisplayError("Error: No Plate Selected", "Selection Error");
             }
         }
 
@@ -449,6 +555,7 @@ namespace LicencePlateManagement
                 }
                 tbSelect.Text = LastSelectedPlate;
                 tbTag.Text = "Untagged";
+                tbTag.ToolTip = "Plate has not been tagged";
             }
             else if (sender == lbxTagged)
             {
@@ -462,6 +569,7 @@ namespace LicencePlateManagement
                 }
                 tbSelect.Text = LastSelectedPlate;
                 tbTag.Text = "Tagged";
+                tbTag.ToolTip = "Plate has been tagged";
             }
         }
 
@@ -479,6 +587,21 @@ namespace LicencePlateManagement
                     lbxAllPlates.Items.Add(item);
                 }
                 lbxTagged.Items.Clear();
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (lbxAllPlates.Items.Count > 0 || lbxTagged.Items.Count > 0)
+            {
+                int i = 1;
+                string filename = $"day_{i.ToString("D2")}.txt";
+                while (File.Exists(filename))
+                {
+                    i++;
+                    filename = $"day_{i.ToString("D2")}.txt";
+                }
+                FileSave(filename);
             }
         }
     }

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:LicencePlateManagement"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="500" MinWidth="480" MinHeight="485"
+        Closing="Window_Closing"
         Style="{StaticResource WinAll}">
     <Grid>
         <Grid.RowDefinitions>
@@ -32,8 +33,8 @@
             </Grid.ColumnDefinitions>
             
             <DockPanel Grid.Column="0" LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="Untagged Plates"/>
-                <Button DockPanel.Dock="Bottom" x:Name="btnAllReset" Width="100" Content="Reset" Click="btnReset_Click"/>
+                <TextBlock DockPanel.Dock="Top" Text="Untagged Plates" ToolTipService.ToolTip="Rego plates that have not been tagged"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnAllReset" Width="100" Content="Reset" Click="btnReset_Click" ToolTipService.ToolTip="Removes all plates from both lists"/>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <ListView DockPanel.Dock="Top" x:Name="lbxAllPlates" SelectionChanged="lbx_SelectionChanged" GotFocus="lbxFocus"/>
             </DockPanel>
@@ -41,43 +42,43 @@
             <StackPanel Margin="15"  Grid.Column="1" Orientation="Vertical">
                 <TextBlock Text="Selected:"/>
                 <WrapPanel Orientation="Horizontal">
-                    <TextBox x:Name="tbSelect" Width="85" IsReadOnly="True"/>
-                    <TextBlock x:Name="tbTag" Text="Untagged" Width="85"  TextAlignment="Center"/>
+                    <TextBox x:Name="tbSelect" Width="85" IsReadOnly="True" ToolTipService.ToolTip="Currently selected plate"/>
+                    <TextBlock x:Name="tbTag" Text="Untagged" Width="85"  TextAlignment="Center" ToolTipService.ToolTip="Plate has not been tagged"/>
                 </WrapPanel>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <WrapPanel Orientation="Horizontal">
-                    <Button x:Name="btnOpen" Content="Open" Width="85" Click="btnOpen_Click"/>
-                    <Button x:Name="btnSave" Content="Save" Width="85" Click="btnSave_Click"/>
+                    <Button x:Name="btnOpen" Content="Open" Width="85" Click="btnOpen_Click" ToolTipService.ToolTip="Opens a text file with plates using a dialog box"/>
+                    <Button x:Name="btnSave" Content="Save" Width="85" Click="btnSave_Click" ToolTipService.ToolTip="Saves the plates to a text file with a dialog box"/>
                 </WrapPanel>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <WrapPanel Orientation="Horizontal">
-                    <Button x:Name="btnEnter" Content="Enter:" Width="85" Click="btnEnter_Click"/>
+                    <Button x:Name="btnEnter" Content="Enter:" Width="85" Click="btnEnter_Click" ToolTipService.ToolTip="Enter a new plate into the untagged list"/>
                     <TextBox x:Name="tbEnter"  Width="85"/>
                 </WrapPanel>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <WrapPanel Orientation="Horizontal">
-                    <Button x:Name="btnTag" Content="Tag/Untag" Width="85" Click="btnTag_Click"/>
-                    <Button x:Name="btnDelete" Content="Delete" Width="85" Click="btnDelete_Click"/>
+                    <Button x:Name="btnTag" Content="Tag/Untag" Width="85" Click="btnTag_Click" ToolTipService.ToolTip="Places an untagged list into the tagged list, and vice versa"/>
+                    <Button x:Name="btnDelete" Content="Delete" Width="85" Click="btnDelete_Click" ToolTipService.ToolTip="Deletes the selected tag from its list"/>
                 </WrapPanel>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <WrapPanel Orientation="Horizontal">
-                    <Button x:Name="btnEdit" Content="Edit:" Width="85" Click="btnEdit_Click"/>
+                    <Button x:Name="btnEdit" Content="Edit:" Width="85" Click="btnEdit_Click" ToolTipService.ToolTip="Replaces the selected tag with new text"/>
                     <TextBox x:Name="tbEdit" Width="85"/>
                 </WrapPanel>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <WrapPanel Orientation="Horizontal">
-                    <Button x:Name="btnSearch" Content="Search:" Width="85" Click="btnSearch_Click"/>
+                    <Button x:Name="btnSearch" Content="Search:" Width="85" Click="btnSearch_Click" ToolTipService.ToolTip="Searches for this plate in both lists"/>
                     <TextBox x:Name="tbSearch" Width="85"/>
                 </WrapPanel>
                 <WrapPanel Orientation="Horizontal">
-                    <ToggleButton x:Name="tbtnBinary" Content="Binary" Width="85" Checked="tbtn_Checked" Unchecked="tbtn_Unchecked"/>
-                    <ToggleButton x:Name="tbtnSequential" Content="Sequential" Width="85" Checked="tbtn_Checked" Unchecked="tbtn_Unchecked"/>
+                    <ToggleButton x:Name="tbtnBinary" Content="Binary" Width="85" Checked="tbtn_Checked" Unchecked="tbtn_Unchecked" ToolTipService.ToolTip="Swaps binary search on/off"/>
+                    <ToggleButton x:Name="tbtnSequential" Content="Sequential" Width="85" Checked="tbtn_Checked" Unchecked="tbtn_Unchecked" ToolTipService.ToolTip="Swaps linear search on/off"/>
                 </WrapPanel>
             </StackPanel>
             
             <DockPanel Grid.Column="2" LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="Tagged Plates" HorizontalAlignment="Right"/>
-                <Button DockPanel.Dock="Bottom" x:Name="btnTaggedReset" Width="100" Content="Reset" Click="btnReset_Click"/>
+                <TextBlock DockPanel.Dock="Top" Text="Tagged Plates" HorizontalAlignment="Right" ToolTipService.ToolTip="Plates that have been tagged for further investigation"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnTaggedReset" Width="100" Content="Reset" Click="btnReset_Click" ToolTipService.ToolTip="Removes the tagged plates and moves them to the untagged plates list"/>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <ListView DockPanel.Dock="Top" x:Name="lbxTagged" SelectionChanged="lbx_SelectionChanged" GotFocus="lbxFocus"/>
             </DockPanel>
