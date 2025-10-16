@@ -49,6 +49,15 @@ namespace LicencePlateManagement
         {
             MessageBox.Show(msg, caption, MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
+
+        private bool DisplayYesNo(string msg, string caption) // display yes/no prompt
+        {
+            if (MessageBox.Show(msg, caption, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                return true;
+            }
+            return false;
+        }
         #endregion
 
         #region InputCheck
@@ -595,16 +604,39 @@ namespace LicencePlateManagement
         {
             if (sender == btnAllReset) // removes all instead of just untagged
             {
-                lbxAllPlates.Items.Clear();
-                lbxTagged.Items.Clear();
+                if (DisplayYesNo("Are you sure you want to remove\nall plates from both lists?","Confirm reset"))
+                {
+                    lbxAllPlates.Items.Clear();
+                    lbxTagged.Items.Clear();
+                }
             }
+                
             else if (sender == btnTaggedReset) // only removes tagged, puts them back onto untagged
             {
-                foreach(var item in lbxTagged.Items)
+                if (DisplayYesNo("Are you sure you want reset the\ntagged list by moving its contents back\nto the untagged list?","Confirm reset"))
                 {
-                    lbxAllPlates.Items.Add(item);
+                    foreach (var item in lbxTagged.Items)
+                    {
+                        lbxAllPlates.Items.Add(item);
+                    }
+                    lbxTagged.Items.Clear();
                 }
-                lbxTagged.Items.Clear();
+            }
+        }
+
+        private void lbx_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DisplayYesNo("Do you want to delete this plate?", "Delete plate"))
+            {
+                if (LastSelectedTagged) // determines which list to delete from
+                {
+                    lbxTagged.Items.Remove(lbxTagged.SelectedItem);
+                }
+                else
+                {
+                    lbxAllPlates.Items.Remove(lbxAllPlates.SelectedItem);
+                }
+                SortLists();
             }
         }
     }
