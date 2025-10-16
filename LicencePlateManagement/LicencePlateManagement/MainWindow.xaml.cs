@@ -459,6 +459,7 @@ namespace LicencePlateManagement
                 {
                     lbxAllPlates.Items.Remove(lbxAllPlates.SelectedItem);
                 }
+                tbSelect.Focus();
                 SortLists();
             }
             else
@@ -606,16 +607,16 @@ namespace LicencePlateManagement
             {
                 if (DisplayYesNo("Are you sure you want to remove\nall plates from both lists?","Confirm reset"))
                 {
-                    lbxAllPlates.Items.Clear();
+                    lbxAllPlates.Items.Clear(); // upon confirmation
                     lbxTagged.Items.Clear();
                 }
             }
                 
             else if (sender == btnTaggedReset) // only removes tagged, puts them back onto untagged
             {
-                if (DisplayYesNo("Are you sure you want reset the\ntagged list by moving its contents back\nto the untagged list?","Confirm reset"))
+                if (DisplayYesNo("Are you sure you want reset the tagged\nlist by moving its contents back to the\nuntagged list?","Confirm reset"))
                 {
-                    foreach (var item in lbxTagged.Items)
+                    foreach (var item in lbxTagged.Items) // if it gets confirmation
                     {
                         lbxAllPlates.Items.Add(item);
                     }
@@ -624,7 +625,7 @@ namespace LicencePlateManagement
             }
         }
 
-        private void lbx_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void lbx_MouseDoubleClick(object sender, MouseButtonEventArgs e) // double click delete functionality
         {
             if (DisplayYesNo("Do you want to delete this plate?", "Delete plate"))
             {
