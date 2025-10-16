@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using System.IO;
+using System.IO.Enumeration;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -28,32 +29,16 @@ namespace LicencePlateManagement
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Regex _rxPlate = new(@"^1[A-Z]{3}-\d{3}$");
+        private readonly Regex _rxPlate = new(@"^1[A-Z]{3}-\d{3}$"); // 1, three capital letters, -, three integers
         private string LastSelectedPlate = string.Empty;
         private bool LastSelectedTagged = false; // false for allPlates, true for tagged
 
         public MainWindow()
         {
             InitializeComponent();
-            tbtnBinary.IsChecked = true;
+            tbtnBinary.IsChecked = true; // defaults to binary
         }
 
-        private void FileSave (string filename)
-        {
-            using (StreamWriter writer = new StreamWriter(filename))
-            {
-                writer.WriteLine("Untagged:");
-                foreach (string plate in lbxAllPlates.Items)
-                {
-                    writer.WriteLine(plate);
-                }
-                writer.WriteLine("Tagged:");
-                foreach (string plate in lbxTagged.Items)
-                {
-                    writer.WriteLine(plate);
-                }
-            }
-        }
         #region Messages
         private void DisplayMessage(string msg, string caption) // display non-error message
         {
@@ -69,7 +54,7 @@ namespace LicencePlateManagement
         #region InputCheck
         private bool CheckInput(string input)
         {
-            if (String.IsNullOrWhiteSpace(input))
+            if (String.IsNullOrWhiteSpace(input)) // just ensure the input actually exists
             {
                 return false;
             }
@@ -78,7 +63,7 @@ namespace LicencePlateManagement
 
         private bool CheckRegex(string input)
         {
-            if (_rxPlate.IsMatch(input))
+            if (_rxPlate.IsMatch(input)) // checks against the regex for a valid plate
             {
                 return true;
             }
@@ -88,7 +73,7 @@ namespace LicencePlateManagement
             }
         }
 
-        private bool CheckDuplicates(string input)
+        private bool CheckDuplicates(string input) // if ever there is a duplicate, returns false
         {
             foreach (string plate in lbxAllPlates.Items)
             {
@@ -108,70 +93,50 @@ namespace LicencePlateManagement
         }
         #endregion
 
-        #region SortSearch
-        private List<string> SortList(List<string> list)
+        #region SelectionCheck
+        private void lbx_SelectionChanged(object sender, SelectionChangedEventArgs e) // two identical methods to catch all potential cases where the selection target changes
         {
-            int iterations = list.Count;
-            for (int i = 0; i < iterations - 1; i++)
-            {
-                for (int j = 0; j < iterations - i - 1; j++)
-                {
-                    if(String.Compare(list[j], list[j+1]) > 0) {
-                        string temp = list[j + 1];
-                        list[j+1] = list[j];
-                        list[j] = temp;
-                    }
-                }
-            }
-            return list;
+            ChangedTarget(sender);
         }
 
-        private int BinarySearch(List<string> list, string searchTerm)
+        private void lbxFocus(object sender, RoutedEventArgs e)
         {
-            int min = 0, max = list.Count-1, mid = 0;
-            if (max < 0)
-            {
-                return -1;
-            }
-            while (min <= max) // the binary search itself
-            {
-                mid = (min + max) >> 1; // halves the integer using bitshift
-                if (String.Compare(list[mid], searchTerm) == 0)
-                {
-                    return mid; // once a match is found, returns the index of the match and exits the function
-                }
-
-                if (String.Compare(list[mid], searchTerm) < 0) // shouldn't go lower, so sets minimum to one more than itself
-                {
-                    min = mid + 1;
-                }
-                else // shouldn't go higher, so sets max to one less than itself
-                {
-                    max = mid - 1;
-                }
-            }
-
-            return -1;
+            ChangedTarget(sender);
         }
 
-        private int SequentialSearch(List<string> list, string searchTerm)
+        private void ChangedTarget(object sender)
         {
-            int iterations = list.Count;
-            if (iterations == 0)
+            if (sender == lbxAllPlates)
             {
-                return -1;
-            }
-            for (int i = 0; i < iterations; i++)
-            {
-                if(searchTerm.Equals(list[i]))
+                if (lbxAllPlates.SelectedItem != null)
                 {
-                    return i;
+                    LastSelectedPlate = lbxAllPlates.SelectedItem.ToString(); // the item itself
+                    LastSelectedTagged = false; // changes which list it knows to target
                 }
+                else
+                {
+                    LastSelectedPlate = String.Empty; // in case of null (from deleted item generally)
+                }
+                tbSelect.Text = LastSelectedPlate; // changes textbox to new item
+                tbTag.Text = "Untagged"; // changes text next to textbox
+                tbTag.ToolTip = "Plate has not been tagged"; // changes tooltip as well
             }
-            return -1;
+            else if (sender == lbxTagged)
+            {
+                if (lbxTagged.SelectedItem != null)
+                {
+                    LastSelectedPlate = lbxTagged.SelectedItem.ToString();
+                    LastSelectedTagged = true;
+                }
+                else
+                {
+                    LastSelectedPlate = String.Empty;
+                }
+                tbSelect.Text = LastSelectedPlate;
+                tbTag.Text = "Tagged";
+                tbTag.ToolTip = "Plate has been tagged";
+            }
         }
-
-        #endregion
 
         // these two methods swap the buttons depending on which one is pressed to ensure only one is enabled at a time
         private void tbtn_Checked(object sender, RoutedEventArgs e)
@@ -197,56 +162,199 @@ namespace LicencePlateManagement
                 tbtnBinary.IsChecked = true;
             }
         }
+        #endregion
+
+        #region SortSearch
+        private void SortLists()
+        {
+            List<string> sorted = new List<string>();
+            foreach (string s in lbxAllPlates.Items)
+            {
+                sorted.Add(s); // sets up a list using the untagged listbox items
+            }
+            sorted.Sort(); // simple sort
+            lbxAllPlates.Items.Clear(); // removes the old order to put in the new one
+            foreach (string s in sorted)
+            {
+                lbxAllPlates.Items.Add(s);
+            }
+
+            sorted.Clear();
+            foreach (string s in lbxTagged.Items)
+            {
+                sorted.Add(s); // sets up a list using the tagged listbox items
+            }
+            sorted.Sort();
+            lbxTagged.Items.Clear();
+            foreach (string s in sorted)
+            {
+                lbxTagged.Items.Add(s);
+            }
+        }
+
+        private int BinarySearch(List<string> list, string searchTerm)
+        {
+            int min = 0, max = list.Count-1, mid = 0;
+            if (max < 0)
+            {
+                return -1;
+            }
+            while (min <= max) // if this ever crosses, the search has failed
+            {
+                mid = (min + max) >> 1; // halves the integer using bitshift
+                if (String.Compare(list[mid], searchTerm) == 0) // 0 means identical
+                {
+                    return mid; // once a match is found, returns the index of the match and exits the function
+                }
+
+                if (String.Compare(list[mid], searchTerm) < 0) // if this is less than 0, the item is later in the list
+                {
+                    min = mid + 1; // shouldn't go lower, so sets minimum to one more than itself
+                }
+                else // shouldn't go higher, so sets max to one less than itself
+                {
+                    max = mid - 1;
+                }
+            }
+
+            return -1;
+        }
+
+        private int SequentialSearch(List<string> list, string searchTerm)
+        {
+            int iterations = list.Count;
+            if (iterations == 0)
+            {
+                return -1;
+            }
+            for (int i = 0; i < iterations; i++)
+            {
+                if(searchTerm.Equals(list[i]))
+                {
+                    return i; // returns the index if ever the file is found
+                }
+            }
+            return -1;
+        }
+
+        #endregion
+
+        #region FileIO
+        private void FileSave(string filename) // performs file save operations. can work with empty lists
+        {
+            using (StreamWriter writer = new StreamWriter(filename))
+            {
+                writer.WriteLine("Untagged:");
+                foreach (string plate in lbxAllPlates.Items)
+                {
+                    writer.WriteLine(plate);
+                }
+                writer.WriteLine("Tagged:");
+                foreach (string plate in lbxTagged.Items)
+                {
+                    writer.WriteLine(plate);
+                }
+            }
+        }
+
+        private string FileIncrement() // increments day file value based on existing files
+        {
+            int i = 1;
+            string filename = $"day_{i.ToString("D2")}.txt";
+            while (File.Exists(filename)) // if that file is already created
+            {
+                i++;
+                if (i > 99)
+                {
+                    filename = $"day_{i.ToString("D")}.txt"; // allows for higher numbers just in case
+                }
+                else
+                {
+                    filename = $"day_{i.ToString("D2")}.txt"; // try again one higher
+                }
+            }
+            return filename;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) // on closing, save the file if either list contains a plate
+        {
+            if (lbxAllPlates.Items.Count > 0 || lbxTagged.Items.Count > 0)
+            {
+                string filename = FileIncrement(); // checks for existing files
+                FileSave(filename); // saves with new filename
+            }
+        }
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents (.txt)|*.txt";
-            dialog.FileName = "day_01.txt";
+            dialog.Filter = "Text documents (.txt)|*.txt"; 
+            dialog.FileName = "day_01.txt"; // default file name to open
 
-            bool ? result = dialog.ShowDialog();
+            bool? result = dialog.ShowDialog();
 
-            if (result == true)
+            if (result == true) // if file was selected to open
             {
                 string filename = dialog.FileName;
                 List<string> contents = new List<string>();
                 using (StreamReader sr = new StreamReader(filename))
                 {
                     string line;
-                    while ((line = sr.ReadLine()) != null)
+                    while ((line = sr.ReadLine()) != null) // puts each file line into a list
                     {
                         contents.Add(line);
                     }
                 }
-                if (contents.Count > 2) 
+                if (contents.Count > 2) // 3 means that at least one plate exists
                 {
-                    if (contents[0].Equals("Untagged:"))
+                    if (contents[0].Equals("Untagged:")) // makes sure the file is actually formatted correctly
                     {
                         contents.Remove(contents[0]);
-                        while (contents[0] != "Tagged:" && contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First()))
+                        while (contents[0] != "Tagged:" && contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First())) // until last item, or tagged list is found
                         {
                             lbxAllPlates.Items.Add(contents[0]);
                             contents.Remove(contents[0]);
                         }
-                        if (contents.Count > 0 && contents.First().Equals("Tagged:"))
+                        if (contents.Count > 0 && contents.First().Equals("Tagged:")) // if tagged does not exist, still opens the file but warns
                         {
                             contents.Remove(contents[0]);
-                            while (contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First()))
+                            while (contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First())) // until the end of the file or a gap
                             {
                                 lbxTagged.Items.Add(contents[0]);
                                 contents.Remove(contents[0]);
                             }
+                            SortLists();
                             DisplayMessage("File opened successfully", "Success!");
                         }
                         else
                         {
-                            DisplayMessage("File opened successfully.\nHowever, please be aware that\nthe tagged list failed to load.", "Warning");
+
+                            SortLists();
+                            DisplayMessage("File opened successfully.\nHowever, please be aware that\nthe tagged list failed to load.", "Warning"); // the warning for no tagged
                         }
                     }
                     else
                     {
-                        DisplayError("File is not in the correct\nformat for this program","File Error");
+                        DisplayError("File is not in the correct\nformat for this program", "File Error");
+                    }
+                }
+                else if (contents.Count == 2) // in case of only having the labels, or just a really small file
+                {
+                    if (contents.First().Equals("Untagged:") && contents.Last().Equals("Tagged:"))
+                    {
+                        DisplayMessage("File is in correct format,\nbut no plates are provided", "Warning");
+                    }
+                    else if (contents.First().Equals("Untagged:") && !string.IsNullOrWhiteSpace(contents.Last())) // file only has one item
+                    {
+                        contents.Remove(contents[0]);
+                        lbxAllPlates.Items.Add(contents[0]);
+                        SortLists();
+                        DisplayMessage("File opened successfully.\nHowever, please be aware that\nthe tagged list failed to load.", "Warning");
+                    }
+                    else
+                    {
+                        DisplayError("File is not in the correct\nformat for this program", "File Error");
                     }
                 }
                 else
@@ -261,29 +369,21 @@ namespace LicencePlateManagement
             var dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.DefaultExt = ".txt";
             dialog.Filter = "Text documents (.txt)|*.txt";
+            dialog.FileName = FileIncrement(); // checks for existing filenames for the default
 
-            int i = 1;
-            string filename = $"day_{i.ToString("D2")}.txt";
-            while (File.Exists(filename))
-            {
-                i++;
-                filename = $"day_{i.ToString("D2")}.txt";
-            }
+            bool? result = dialog.ShowDialog(); 
 
-            dialog.FileName = filename;
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
+            if (result == true) // if saving was chosen
             {
                 string fileName = dialog.FileName;
                 FileSave(fileName);
             }
         }
-
+        #endregion
+        
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
-            string InPlate = tbEnter.Text;
+            string InPlate = tbEnter.Text; // checks 3 conditions, with an error for each
             bool success = CheckInput(InPlate);
             if (success)
             {
@@ -294,6 +394,7 @@ namespace LicencePlateManagement
                     if (success)
                     {
                         lbxAllPlates.Items.Add(InPlate);
+                        SortLists();
                     }
                     else
                     {
@@ -317,10 +418,10 @@ namespace LicencePlateManagement
         {
             if (!String.IsNullOrWhiteSpace(LastSelectedPlate))
             {
-                if (LastSelectedTagged)
+                if (LastSelectedTagged) // determines which list actually needs to be tagged or untagged
                 {
-                    lbxAllPlates.Items.Add(lbxTagged.SelectedItem);
-                    lbxAllPlates.SelectedItem = lbxTagged.SelectedItem;
+                    lbxAllPlates.Items.Add(lbxTagged.SelectedItem); // has to add the item to one before removing it from the other
+                    lbxAllPlates.SelectedItem = lbxTagged.SelectedItem; // sets the selection to the same item in the new list
                     lbxTagged.Items.Remove(lbxTagged.SelectedItem);
                 }
                 else
@@ -329,6 +430,7 @@ namespace LicencePlateManagement
                     lbxTagged.SelectedItem = lbxAllPlates.SelectedItem;
                     lbxAllPlates.Items.Remove(lbxAllPlates.SelectedItem);
                 }
+                SortLists(); // sorts after the fact
             }
             else
             {
@@ -340,7 +442,7 @@ namespace LicencePlateManagement
         {
             if (!String.IsNullOrWhiteSpace(LastSelectedPlate))
             {
-                if (LastSelectedTagged)
+                if (LastSelectedTagged) // determines which list to delete from
                 {
                     lbxTagged.Items.Remove(lbxTagged.SelectedItem);
                 }
@@ -348,6 +450,7 @@ namespace LicencePlateManagement
                 {
                     lbxAllPlates.Items.Remove(lbxAllPlates.SelectedItem);
                 }
+                SortLists();
             }
             else
             {
@@ -357,15 +460,15 @@ namespace LicencePlateManagement
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(LastSelectedPlate))
+            if (!String.IsNullOrWhiteSpace(LastSelectedPlate)) // makes sure there something ther first
             {
                 string EditPlate = tbEdit.Text;
                 ListView currentList = lbxAllPlates;
                 if (LastSelectedTagged)
                 {
-                    currentList = lbxTagged;
+                    currentList = lbxTagged; // determines which list you're editing
                 }
-                bool success = CheckInput(EditPlate);
+                bool success = CheckInput(EditPlate); // checks the three conditions, with their own error messages
                 if (success)
                 {
                     success = CheckRegex(EditPlate);
@@ -377,6 +480,7 @@ namespace LicencePlateManagement
                             currentList.Items.Insert(currentList.SelectedIndex, EditPlate);
                             currentList.Items.Remove(currentList.SelectedItem);
                             currentList.SelectedItem = EditPlate;
+                            SortLists();
                         }
                         else
                         {
@@ -393,7 +497,7 @@ namespace LicencePlateManagement
                     DisplayError("Error: No Plate Provided\nPlease provide a valid licence plate.", "Input Error");
                 }
                 tbEdit.Text = string.Empty;
-                tbEdit.Focus();
+                tbEdit.Focus(); // focuses back to the same box
             }
             else
             {
@@ -403,44 +507,22 @@ namespace LicencePlateManagement
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(tbSearch.Text))
+            if (!String.IsNullOrWhiteSpace(tbSearch.Text)) // two error conditions, then checks which search method
             {
                 if (lbxAllPlates.Items.Count > 0 || lbxTagged.Items.Count > 0)
                 {
-                    if (tbtnBinary.IsChecked == true)
+                    if (tbtnBinary.IsChecked == true) // binary search
                     {
                         // sorts each list first
-                        List<string> sorted = new List<string>();
-                        foreach (string s in lbxAllPlates.Items)
-                        {
-                            sorted.Add(s);
-                        }
-                        sorted = SortList(sorted);
-                        lbxAllPlates.Items.Clear();
-                        foreach (string s in sorted)
-                        {
-                            lbxAllPlates.Items.Add(s);
-                        }
-
-                        sorted.Clear();
-                        foreach (string s in lbxTagged.Items)
-                        {
-                            sorted.Add(s);
-                        }
-                        sorted = SortList(sorted);
-                        lbxTagged.Items.Clear();
-                        foreach (string s in sorted)
-                        {
-                            lbxTagged.Items.Add(s);
-                        }
+                        SortLists();
                         // then searches
                         List<string> searching = new List<string>();
-                        foreach (string s in lbxAllPlates.Items)
+                        foreach (string s in lbxAllPlates.Items) // attempts with untagged first
                         {
                             searching.Add(s);
                         }
-                        int index = BinarySearch(searching, tbSearch.Text);
-                        if (index == -1)
+                        int index = BinarySearch(searching, tbSearch.Text); // the actual search
+                        if (index == -1) // swaps to tagged list if none found
                         {
                             searching.Clear();
                             foreach (string s in lbxTagged.Items)
@@ -448,30 +530,30 @@ namespace LicencePlateManagement
                                 searching.Add(s);
                             }
                             index = BinarySearch(searching, tbSearch.Text);
-                            if (index == -1)
+                            if (index == -1) // if both searches fail
                             {
                                 DisplayError("Error: No Match Found\nPlate does not exist in database", "Match Not Found");
                             }
                             else
                             {
                                 lbxTagged.SelectedIndex = index;
-                                DisplayMessage($"Plate found in database!\nPlate is tagged at index {index}", "Match Found");
+                                DisplayMessage($"Plate found in database!\nPlate is tagged at index {index}", "Match Found"); // match found!
                             }
                         }
                         else
                         {
                             lbxAllPlates.SelectedIndex = index;
-                            DisplayMessage($"Plate found in database!\nPlate is untagged at index {index}", "Match Found");
+                            DisplayMessage($"Plate found in database!\nPlate is untagged at index {index}", "Match Found"); // match found!
                         }
                     }
-                    else if (tbtnSequential.IsChecked == true)
+                    else if (tbtnSequential.IsChecked == true) // sequential search
                     {
                         List<string> searching = new List<string>();
-                        foreach (string s in lbxAllPlates.Items)
+                        foreach (string s in lbxAllPlates.Items) // start with untagged
                         {
                             searching.Add(s);
                         }
-                        int index = SequentialSearch(searching, tbSearch.Text);
+                        int index = SequentialSearch(searching, tbSearch.Text); // the actual search
                         if (index == -1) // swaps to tagged list if not found in untagged. no duplicates should exist in system
                         {
                             searching.Clear();
@@ -480,20 +562,20 @@ namespace LicencePlateManagement
                                 searching.Add(s);
                             }
                             index = SequentialSearch(searching, tbSearch.Text);
-                            if (index == -1)
+                            if (index == -1) // in case of neither
                             {
                                 DisplayError("Error: No Match Found\nPlate does not exist in database", "Match Not Found");
                             }
                             else
                             {
                                 lbxTagged.SelectedIndex = index;
-                                DisplayMessage($"Plate found in database!\nPlate is tagged at index {index}", "Match Found");
+                                DisplayMessage($"Plate found in database!\nPlate is tagged at index {index}", "Match Found"); // match found!
                             }
                         }
                         else
                         {
                             lbxAllPlates.SelectedIndex = index;
-                            DisplayMessage($"Plate found in database!\nPlate is untagged at index {index}","Match Found");
+                            DisplayMessage($"Plate found in database!\nPlate is untagged at index {index}","Match Found"); // match found!
                         }
                     }
                 }
@@ -509,99 +591,20 @@ namespace LicencePlateManagement
             tbSearch.Text = string.Empty;
         }
 
-        private void lbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender == lbxAllPlates)
-            {
-                if (lbxAllPlates.SelectedItem != null)
-                {
-                    LastSelectedPlate = lbxAllPlates.SelectedItem.ToString();
-                    LastSelectedTagged = false;
-                }
-                else
-                {
-                    LastSelectedPlate = String.Empty;
-                }
-                tbSelect.Text = LastSelectedPlate;
-                tbTag.Text = "Untagged";
-            }
-            else if (sender == lbxTagged)
-            {
-                if (lbxTagged.SelectedItem != null)
-                {
-                    LastSelectedPlate = lbxTagged.SelectedItem.ToString();
-                    LastSelectedTagged = true;
-                }
-                else
-                {
-                    LastSelectedPlate = String.Empty;
-                }
-                tbSelect.Text = LastSelectedPlate;
-                tbTag.Text = "Tagged";
-            }
-        }
-
-        private void lbxFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender == lbxAllPlates)
-            {
-                if (lbxAllPlates.SelectedItem != null)
-                {
-                    LastSelectedPlate = lbxAllPlates.SelectedItem.ToString();
-                }
-                else
-                {
-                    LastSelectedPlate = String.Empty;
-                }
-                tbSelect.Text = LastSelectedPlate;
-                tbTag.Text = "Untagged";
-                tbTag.ToolTip = "Plate has not been tagged";
-            }
-            else if (sender == lbxTagged)
-            {
-                if (lbxTagged.SelectedItem != null)
-                {
-                    LastSelectedPlate = lbxTagged.SelectedItem.ToString();
-                }
-                else
-                {
-                    LastSelectedPlate = String.Empty;
-                }
-                tbSelect.Text = LastSelectedPlate;
-                tbTag.Text = "Tagged";
-                tbTag.ToolTip = "Plate has been tagged";
-            }
-        }
-
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
-            if (sender == btnAllReset)
+            if (sender == btnAllReset) // removes all instead of just untagged
             {
                 lbxAllPlates.Items.Clear();
                 lbxTagged.Items.Clear();
             }
-            else if (sender == btnTaggedReset)
+            else if (sender == btnTaggedReset) // only removes tagged, puts them back onto untagged
             {
                 foreach(var item in lbxTagged.Items)
                 {
                     lbxAllPlates.Items.Add(item);
                 }
                 lbxTagged.Items.Clear();
-            }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (lbxAllPlates.Items.Count > 0 || lbxTagged.Items.Count > 0)
-            {
-                int i = 1;
-                string filename = $"day_{i.ToString("D2")}.txt";
-                while (File.Exists(filename))
-                {
-                    i++;
-                    filename = $"day_{i.ToString("D2")}.txt";
-                }
-                FileSave(filename);
             }
         }
     }

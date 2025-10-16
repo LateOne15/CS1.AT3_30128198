@@ -34,7 +34,7 @@
             
             <DockPanel Grid.Column="0" LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Text="Untagged Plates" ToolTipService.ToolTip="Rego plates that have not been tagged"/>
-                <Button DockPanel.Dock="Bottom" x:Name="btnAllReset" Width="100" Content="Reset" Click="btnReset_Click" ToolTipService.ToolTip="Removes all plates from both lists"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnAllReset" Width="100" Content="Reset All" Click="btnReset_Click" ToolTipService.ToolTip="Removes all plates from both lists"/>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <ListView DockPanel.Dock="Top" x:Name="lbxAllPlates" SelectionChanged="lbx_SelectionChanged" GotFocus="lbxFocus"/>
             </DockPanel>
@@ -78,7 +78,7 @@
             
             <DockPanel Grid.Column="2" LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Text="Tagged Plates" HorizontalAlignment="Right" ToolTipService.ToolTip="Plates that have been tagged for further investigation"/>
-                <Button DockPanel.Dock="Bottom" x:Name="btnTaggedReset" Width="100" Content="Reset" Click="btnReset_Click" ToolTipService.ToolTip="Removes the tagged plates and moves them to the untagged plates list"/>
+                <Button DockPanel.Dock="Bottom" x:Name="btnTaggedReset" Width="100" Content="Reset Tagged" Click="btnReset_Click" ToolTipService.ToolTip="Removes the tagged plates and moves them to the untagged plates list"/>
                 <GridSplitter DockPanel.Dock="Bottom" Height="10"/>
                 <ListView DockPanel.Dock="Top" x:Name="lbxTagged" SelectionChanged="lbx_SelectionChanged" GotFocus="lbxFocus"/>
             </DockPanel>
