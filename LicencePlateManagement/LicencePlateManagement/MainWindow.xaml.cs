@@ -408,11 +408,13 @@ namespace LicencePlateManagement
                     else
                     {
                         DisplayError("Error: Duplicate Plate Found\nPlease ensure all plates are unique", "Input Error");
+                        tbEnter.Focus();
                     }
                 }
                 else
                 {
                     DisplayError("Error: Invalid Plate Format\nPlease provide a valid licence plate.", "Input Error");
+                    tbEnter.Focus();
                 }
             }
             else
@@ -495,11 +497,13 @@ namespace LicencePlateManagement
                         else
                         {
                             DisplayError("Error: Duplicate Plate Found\nPlease ensure all plates are unique", "Input Error");
+                            tbEdit.Focus();
                         }
                     }
                     else
                     {
                         DisplayError("Error: Invalid Plate Format\nPlease provide a valid licence plate.", "Input Error");
+                        tbEdit.Focus();
                     }
                 }
                 else
@@ -512,6 +516,7 @@ namespace LicencePlateManagement
             else
             {
                 DisplayError("Error: No Plate Selected", "Selection Error");
+                tbEdit.Focus();
             }
         }
 
@@ -543,6 +548,7 @@ namespace LicencePlateManagement
                             if (index == -1) // if both searches fail
                             {
                                 DisplayError("Error: No Match Found\nPlate does not exist in database", "Match Not Found");
+                                tbSearch.Focus();
                             }
                             else
                             {
@@ -575,6 +581,7 @@ namespace LicencePlateManagement
                             if (index == -1) // in case of neither
                             {
                                 DisplayError("Error: No Match Found\nPlate does not exist in database", "Match Not Found");
+                                tbSearch.Focus();
                             }
                             else
                             {
@@ -592,11 +599,13 @@ namespace LicencePlateManagement
                 else
                 {
                     DisplayError("Error: Lists are Empty!\nPlease ensure searching occurs with at least one list populated.", "Search Error");
+                    tbSearch.Focus();
                 }
             }
             else
             {
                 DisplayError("Error: Input is Empty\nPlease enter a valid licence plate to search", "Input Error");
+                tbSearch.Focus();
             }
             tbSearch.Text = string.Empty;
         }
@@ -627,17 +636,22 @@ namespace LicencePlateManagement
 
         private void lbx_MouseDoubleClick(object sender, MouseButtonEventArgs e) // double click delete functionality
         {
-            if (DisplayYesNo("Do you want to delete this plate?", "Delete plate"))
+            if (sender == lbxAllPlates)
             {
-                if (LastSelectedTagged) // determines which list to delete from
-                {
-                    lbxTagged.Items.Remove(lbxTagged.SelectedItem);
-                }
-                else
+                if (DisplayYesNo("Do you want to delete this plate?", "Delete plate"))
                 {
                     lbxAllPlates.Items.Remove(lbxAllPlates.SelectedItem);
+                    SortLists();
                 }
-                SortLists();
+            }
+            else if (sender == lbxTagged)
+            {
+                if (DisplayYesNo("Do you want to untag this plate?", "Untag plate"))
+                {
+                    lbxAllPlates.Items.Add(lbxTagged.SelectedItem);
+                    lbxTagged.Items.Remove(lbxTagged.SelectedItem);
+                    SortLists();
+                }
             }
         }
     }

@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "LicencePlateManagement\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml.cs*",
               "RelativeToolTip": "LicencePlateManagement\\MainWindow.xaml.cs*",
-              "ViewState": "AgIAAFYCAAAAAAAAAAAiwG4CAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAFoCAAAAAAAAAAAmwFkCAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-25T04:25:55.013Z",
               "IsPinned": true,
@@ -44,11 +44,10 @@
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml",
               "RelativeDocumentMoniker": "LicencePlateManagement\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml*",
-              "RelativeToolTip": "LicencePlateManagement\\MainWindow.xaml*",
+              "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\MainWindow.xaml",
+              "RelativeToolTip": "LicencePlateManagement\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-09-25T04:25:55.373Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-25T04:25:55.373Z"
             },
             {
               "$type": "Document",
@@ -59,8 +58,7 @@
               "ToolTip": "C:\\Users\\30128198\\Documents\\GitHub\\CS1.AT3_30128198\\LicencePlateManagement\\LicencePlateManagement\\App.xaml",
               "RelativeToolTip": "LicencePlateManagement\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-09T06:48:36.68Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-09T06:48:36.68Z"
             }
           ]
         }
