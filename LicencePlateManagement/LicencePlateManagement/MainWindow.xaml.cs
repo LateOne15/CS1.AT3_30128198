@@ -307,6 +307,8 @@ namespace LicencePlateManagement
             {
                 string filename = dialog.FileName;
                 List<string> contents = new List<string>();
+                List<string> contentsUntag = new List<string>();
+                List<string> contentsTag = new List<string>();
                 using (StreamReader sr = new StreamReader(filename))
                 {
                     string line;
@@ -322,7 +324,7 @@ namespace LicencePlateManagement
                         contents.Remove(contents[0]);
                         while (contents[0] != "Tagged:" && contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First())) // until last item, or tagged list is found
                         {
-                            lbxAllPlates.Items.Add(contents[0]);
+                            contentsUntag.Add(contents[0]);
                             contents.Remove(contents[0]);
                         }
                         if (contents.Count > 0 && contents.First().Equals("Tagged:")) // if tagged does not exist, still opens the file but warns
@@ -330,17 +332,15 @@ namespace LicencePlateManagement
                             contents.Remove(contents[0]);
                             while (contents.Count > 0 && !string.IsNullOrWhiteSpace(contents.First())) // until the end of the file or a gap
                             {
-                                lbxTagged.Items.Add(contents[0]);
+                                contentsTag.Add(contents[0]);
                                 contents.Remove(contents[0]);
                             }
                             SortLists();
-                            DisplayMessage("File opened successfully", "Success!");
                         }
                         else
                         {
-
                             SortLists();
-                            DisplayMessage("File opened successfully.\nHowever, please be aware that\nthe tagged list failed to load.", "Warning"); // the warning for no tagged
+                            DisplayMessage("Tagged list failed to load\nPlease be aware that data may be corrupted", "Warning"); // the warning for no tagged
                         }
                     }
                     else
@@ -357,9 +357,10 @@ namespace LicencePlateManagement
                     else if (contents.First().Equals("Untagged:") && !string.IsNullOrWhiteSpace(contents.Last())) // file only has one item
                     {
                         contents.Remove(contents[0]);
-                        lbxAllPlates.Items.Add(contents[0]);
+                        contentsUntag.Add(contents[0]);
+                        contents.Remove(contents[0]);
                         SortLists();
-                        DisplayMessage("File opened successfully.\nHowever, please be aware that\nthe tagged list failed to load.", "Warning");
+                        DisplayMessage("Tagged list failed to load\nPlease be aware that data may be corrupted", "Warning"); // the warning for no tagged
                     }
                     else
                     {
@@ -370,22 +371,64 @@ namespace LicencePlateManagement
                 {
                     DisplayError("File is not in the correct\nformat for this program", "File Error");
                 }
+                if (contentsUntag.Count > 0 || contentsTag.Count > 0)
+                {
+                    bool goodData = true;
+                    foreach (string plate in contentsUntag)
+                    {
+                        if (CheckInput(plate) && CheckDuplicates(plate) && CheckRegex(plate))
+                        {
+                            lbxAllPlates.Items.Add(plate);
+                        }
+                        else
+                        {
+                            goodData = false;
+                        }
+
+                    }
+                    foreach (string plate in contentsTag)
+                    {
+                        if (CheckInput(plate) && CheckDuplicates(plate) && CheckRegex(plate))
+                        {
+                            lbxTagged.Items.Add(plate);
+                        }
+                        else
+                        {
+                            goodData = false;
+                        }
+                    }
+                    if (goodData)
+                    {
+                        DisplayMessage("File opened successfully", "Success!");
+                    }
+                    else
+                    {
+                        DisplayMessage("Some of the provided plates were invalid for this program\nPlease ensure inputs match appropriate plate formatting", "Warning");
+                    }
+                }
             }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents (.txt)|*.txt";
-            dialog.FileName = FileIncrement(); // checks for existing filenames for the default
-
-            bool? result = dialog.ShowDialog(); 
-
-            if (result == true) // if saving was chosen
+            if (lbxAllPlates.Items.Count > 0 || lbxTagged.Items.Count > 0)
             {
-                string fileName = dialog.FileName;
-                FileSave(fileName);
+                var dialog = new Microsoft.Win32.SaveFileDialog();
+                dialog.DefaultExt = ".txt";
+                dialog.Filter = "Text documents (.txt)|*.txt";
+                dialog.FileName = FileIncrement(); // checks for existing filenames for the default
+
+                bool? result = dialog.ShowDialog();
+
+                if (result == true) // if saving was chosen
+                {
+                    string fileName = dialog.FileName;
+                    FileSave(fileName);
+                }
+            }
+            else
+            {
+                DisplayError("Error: No plates to save", "Saving error");
             }
         }
         #endregion
@@ -614,7 +657,11 @@ namespace LicencePlateManagement
         {
             if (sender == btnAllReset) // removes all instead of just untagged
             {
-                if (DisplayYesNo("Are you sure you want to remove\nall plates from both lists?","Confirm reset"))
+                if (lbxAllPlates.Items.Count == 0 && lbxTagged.Items.Count == 0)
+                {
+                    DisplayError("Error: Plate Lists are Empty\nNo plates to reset","Reset Error");
+                }
+                else if (DisplayYesNo("Are you sure you want to remove\nall plates from both lists?","Confirm reset"))
                 {
                     lbxAllPlates.Items.Clear(); // upon confirmation
                     lbxTagged.Items.Clear();
@@ -623,7 +670,11 @@ namespace LicencePlateManagement
                 
             else if (sender == btnTaggedReset) // only removes tagged, puts them back onto untagged
             {
-                if (DisplayYesNo("Are you sure you want reset the tagged\nlist by moving its contents back to the\nuntagged list?","Confirm reset"))
+                if (lbxTagged.Items.Count == 0)
+                {
+                    DisplayError("Error: Tagged Plate List is Empty\nNo plates to reset", "Reset Error");
+                }
+                else if (DisplayYesNo("Are you sure you want reset the tagged\nlist by moving its contents back to the\nuntagged list?","Confirm reset"))
                 {
                     foreach (var item in lbxTagged.Items) // if it gets confirmation
                     {
@@ -636,7 +687,7 @@ namespace LicencePlateManagement
 
         private void lbx_MouseDoubleClick(object sender, MouseButtonEventArgs e) // double click delete functionality
         {
-            if (sender == lbxAllPlates)
+            if (sender == lbxAllPlates && !string.IsNullOrWhiteSpace(LastSelectedPlate) && !LastSelectedTagged)
             {
                 if (DisplayYesNo("Do you want to delete this plate?", "Delete plate"))
                 {
@@ -644,7 +695,7 @@ namespace LicencePlateManagement
                     SortLists();
                 }
             }
-            else if (sender == lbxTagged)
+            else if (sender == lbxTagged && !string.IsNullOrWhiteSpace(LastSelectedPlate) && LastSelectedTagged)
             {
                 if (DisplayYesNo("Do you want to untag this plate?", "Untag plate"))
                 {
