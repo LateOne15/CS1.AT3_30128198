@@ -240,7 +240,7 @@ namespace LicencePlateManagement
             {
                 if(searchTerm.Equals(list[i]))
                 {
-                    return i; // returns the index if ever the file is found
+                    return i; // returns the index if ever the item is found
                 }
             }
             return -1;
@@ -641,7 +641,7 @@ namespace LicencePlateManagement
                 }
                 else
                 {
-                    DisplayError("Error: Lists are Empty!\nPlease ensure searching occurs with at least one list populated.", "Search Error");
+                    DisplayError("Error: Lists are Empty!\nPlease ensure searching occurs\nwith at least one list populated.", "Search Error");
                     tbSearch.Focus();
                 }
             }
