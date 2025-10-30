@@ -403,8 +403,8 @@ namespace LicencePlateManagement
                     }
                     else
                     {
-                        DisplayMessage("Some of the provided plates were invalid for this program\nPlease ensure inputs match appropriate plate formatting,\n" +
-                            "and that there are no duplicates either within the program or the file", "Warning");
+                        DisplayMessage("Some of the provided plates were invalid.\nPlease ensure inputs match appropriate plate\n" +
+                            "formatting, and that there are no duplicates\neither within the program or the file.", "Warning");
                     }
                 }
             }
