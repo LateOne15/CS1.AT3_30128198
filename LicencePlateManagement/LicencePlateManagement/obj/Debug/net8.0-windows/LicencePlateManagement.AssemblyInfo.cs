@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LicencePlateManagement")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d73736598acd7de41a0d1b65c8ae7871eb47d876")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a89dbe2e40043b768ecb7210aa923b8788e08ed5")]
 [assembly: System.Reflection.AssemblyProductAttribute("LicencePlateManagement")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LicencePlateManagement")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
